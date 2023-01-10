@@ -11,7 +11,19 @@ module.exports = function (injectedStore) {
     return dataMeasureMilks;
   }
 
+  async function listMilks() {
+    const dataMilks = await store.listMilks();
+    return dataMilks;
+  }
+
+  async function insertMeasureMilks(data) {
+    const dataInsertMeasureMilks = await store.insertMeasureMilks(data);
+    return dataInsertMeasureMilks;
+  }
+
   return {
-    list
+    list,
+    listMilks,
+    insertMeasureMilks
   };
 };

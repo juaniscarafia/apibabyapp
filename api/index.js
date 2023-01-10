@@ -1,6 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const config = require("../config.js");
+const login = require("./components/login/network");
 const measureMilks = require("./components/measuremilks/network");
 const errors = require("../network/errors");
 const err = require("../utils/error.js");
@@ -14,6 +15,7 @@ app.use(cors());
 
 // RUTAS
 // app.use("/api/productos/Ec", productosEC);
+app.use("/api/login", login);
 app.use("/api/measuremilks", measureMilks);
 
 app.use(errors);
