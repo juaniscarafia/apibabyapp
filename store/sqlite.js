@@ -74,6 +74,33 @@ function listMeasureMilks() {
   });
 }
 
+function listAll() {
+  //.get() --> One Row
+  //.all() --> All Rows
+  return new Promise((resolve,reject) => {
+    pool.acquire()
+      .then(db => {
+        let res = db.prepare(`SELECT Id, Date, Time, Measure, Name, Description 
+        FROM MeasureMilks MM
+        LEFT JOIN Milks M ON M.IdMilk = MM.IdMilk;`).all();
+
+        db.release();
+        
+        let list = []
+
+        res.forEach(data => {
+          list.push(JSON.parse(Object.values(data)));
+        });
+        
+        return resolve(list);
+      })
+      .catch(function (err) {
+        db.release();
+        return reject(err);
+      });
+  });
+}
+
 function listMilks() {
   //.get() --> One Row
   //.all() --> All Rows
@@ -130,6 +157,7 @@ function updateMeasureMilks(data) {
 
 module.exports = {
   listMeasureMilks,
+  listAll,
   listMilks,
   insertMeasureMilks,
   updateMeasureMilks,

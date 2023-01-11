@@ -7,6 +7,7 @@ const router = express.Router();
 //RUTAS LOCALES
 
 router.get("/", list);
+router.get("/all", listAll);
 router.get("/milks", listMilks);
 router.post("/insertmeasure", insertMeasureMilks);
 router.put("/updatemeasure/:id", updateMeasureMilks);
@@ -15,6 +16,15 @@ router.put("/updatemeasure/:id", updateMeasureMilks);
 async function list(req, res, next) {
   try {
     let lista = await controller.list();
+    response.success(req, res, lista, 200);
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function listAll(req, res, next) {
+  try {
+    let lista = await controller.listAll();
     response.success(req, res, lista, 200);
   } catch (error) {
     next(error);
