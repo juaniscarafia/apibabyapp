@@ -7,6 +7,7 @@ const measureMilks = require("./components/measuremilks/network");
 const errors = require("../network/errors");
 const err = require("../utils/error.js");
 const cors = require("cors");
+const router = express.Router();
 
 const app = express();
 app.use(bodyParser.json());
@@ -16,6 +17,7 @@ app.use(cors());
 
 // RUTAS
 // app.use("/api/productos/Ec", productosEC);
+app.use('/.netlify/api/index', router); 
 app.use("/login", login);
 app.use("/measuremilks", measureMilks);
 
