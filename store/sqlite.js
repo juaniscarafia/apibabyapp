@@ -111,9 +111,27 @@ function insertMeasureMilks(data) {
   });
 }
 
+function updateMeasureMilks(data) {
+  return new Promise((resolve,reject) => {
+    pool.acquire()
+      .then(db => {
+        const stmt = db.prepare(`UPDATE MeasureMilks SET Date=?,Time=?,Measure=?,IdMilk=?,IdBaby=? WHERE Id= ?;`);
+        const info = stmt.run(data.Date, data.Time, data.Measure, data.IdMilk, data.IdBaby, data.Id);
+
+        db.release();
+        return resolve(info.changes);
+      })
+      .catch(function (err) {
+        db.release();
+        return reject(err);
+      });
+  });
+}
+
 module.exports = {
   listMeasureMilks,
   listMilks,
   insertMeasureMilks,
+  updateMeasureMilks,
   login
 };

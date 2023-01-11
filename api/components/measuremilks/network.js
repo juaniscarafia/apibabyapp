@@ -9,6 +9,7 @@ const router = express.Router();
 router.get("/", list);
 router.get("/milks", listMilks);
 router.post("/insertmeasure", insertMeasureMilks);
+router.put("/updatemeasure/:id", updateMeasureMilks);
 
 //FUNCIONES INTERNAS
 async function list(req, res, next) {
@@ -33,6 +34,20 @@ async function insertMeasureMilks(req, res, next) {
   try {
     const data = req.body;
     let lista = await controller.insertMeasureMilks(data);
+    response.success(req, res, lista, 200);
+  } catch (error) {
+    next(error);
+  }
+}
+
+async function updateMeasureMilks(req, res, next) {
+  try {
+    const Id = parseInt(req.params.id);
+    const data = req.body;
+    let lista = await controller.updateMeasureMilks({
+      ...data,
+      Id
+    });
     response.success(req, res, lista, 200);
   } catch (error) {
     next(error);

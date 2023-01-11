@@ -21,9 +21,15 @@ module.exports = function (injectedStore) {
     return dataInsertMeasureMilks;
   }
 
+  async function updateMeasureMilks(data) {
+    const dataUpdateMeasureMilks = await store.updateMeasureMilks(data);
+    return dataUpdateMeasureMilks;
+  }
+
   return {
     list,
     listMilks,
-    insertMeasureMilks
+    insertMeasureMilks,
+    updateMeasureMilks
   };
 };
