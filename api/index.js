@@ -17,9 +17,9 @@ app.use(cors());
 
 // RUTAS
 // app.use("/api/productos/Ec", productosEC);
-app.use('/.netlify/api/index', router); 
-app.use("/login", login);
-app.use("/measuremilks", measureMilks);
+app.use('/.netlify/functions/index', router); 
+app.use("api/login", login);
+app.use("api/measuremilks", measureMilks);
 
 app.use(errors);
 app.listen(config.api.port, () => {
