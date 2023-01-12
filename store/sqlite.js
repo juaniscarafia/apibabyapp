@@ -1,5 +1,7 @@
 const { Pool } = require("better-sqlite-pool");
 const error = require("../utils/error");
+const cron = require('node-cron');
+const config = require("../config.js");
 
 // Conexiones
 let pool;
@@ -148,6 +150,44 @@ function updateMeasureMilks(data) {
       });
   });
 }
+
+function createBackup(){
+  console.log(`backup started`);
+  //           # ┌────────────── second (optional)
+  //           # │ ┌──────────── minute
+  //           # │ │ ┌────────── hour
+  //           # │ │ │ ┌──────── day of month
+  //           # │ │ │ │ ┌────── month
+  //           # │ │ │ │ │ ┌──── day of week
+  //           # │ │ │ │ │ │
+  //           # │ │ │ │ │ │
+  //           # * * * * * *
+  cron.schedule(`${config.bkpM} ${config.bkpH} * * *`, () => {
+    const date = new Date(new Date().toLocaleString('es-AR', {timeZone: 'America/Argentina/Buenos_Aires'}));
+    console.log(`${date}`);
+    pool.acquire()
+    .then(db => {
+      db.backup(`${config.pathBKP}/backup-${date}.db`)
+      .then(() => {
+        console.log(`backup complete! at ${date}`);
+      })
+      .catch((err) => {
+        console.log(`backup failed at ${date} --> err: ${err}`);
+      });
+      db.release();
+    })
+    .catch(function (err) {
+      console.log(`backup failed at ${date} --> err: ${err}`);
+      db.release();
+    });
+  }, {
+    scheduled: true,
+    timezone: "America/Argentina/Buenos_Aires"
+  });
+  console.log(`backup finished`);
+}
+
+createBackup()
 
 module.exports = {
   listMeasureMilks,
