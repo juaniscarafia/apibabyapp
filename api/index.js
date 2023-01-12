@@ -3,7 +3,6 @@ const bodyParser = require("body-parser");
 const config = require("../config.js");
 const login = require("./components/login/network");
 const measureMilks = require("./components/measuremilks/network");
-const createBackup = require("../utils/backupDB");
 const errors = require("../network/errors");
 const err = require("../utils/error.js");
 const cors = require("cors");
