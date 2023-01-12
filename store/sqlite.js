@@ -152,7 +152,6 @@ function updateMeasureMilks(data) {
 }
 
 function createBackup(){
-  console.log(`backup started`);
   //           # ┌────────────── second (optional)
   //           # │ ┌──────────── minute
   //           # │ │ ┌────────── hour
@@ -163,11 +162,13 @@ function createBackup(){
   //           # │ │ │ │ │ │
   //           # * * * * * *
   cron.schedule(`${config.bkpM} ${config.bkpH} * * *`, () => {
-    const date = new Date(new Date().toLocaleString('es-AR', {timeZone: 'America/Argentina/Buenos_Aires'}));
-    console.log(`${date}`);
+    const arrDate = new Date().toLocaleString('es-AR', {timeZone: 'America/Argentina/Buenos_Aires'}).slice(0,9).split('/');
+    arrDate[0] = arrDate[0].padStart(2,'0');
+    arrDate[1] = arrDate[1].padStart(2,'0');
+    let date = arrDate.join('-');
     pool.acquire()
     .then(db => {
-      db.backup(`${config.pathBKP}/backup-${date}.db`)
+      db.backup(`${config.pathBKP}/babyappDB-bkp-${date}.db`)
       .then(() => {
         console.log(`backup complete! at ${date}`);
       })
